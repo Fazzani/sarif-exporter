@@ -47,11 +47,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body: 'Version ${{ VERSION }}'
+          body: 'Version ${{ env.VERSION }}'
           files: |
             ./bin/**/js
       - name: Publish
-        run: npm version $VERSION && npm publish --provenance --access public
+        run: npm version ${{ env.VERSION }} && npm publish --provenance --access public
         if: startsWith(github.ref, 'refs/tags/')
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
