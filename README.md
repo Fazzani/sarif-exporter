@@ -1,6 +1,6 @@
 # SARIF exporter
 
-This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET, PIP-AUDIT)
+This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET)
 
 ```shell
 > sarif-exporter --help
@@ -8,10 +8,10 @@ This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audi
 Usage: index [options] <filename>
 
 Arguments:
-  filename                   Json source report path (Nuget/NPM/PIP).
+  filename                   Json source report path (Nuget/NPM).
 
 Options:
-  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", "pip", default: "npm")
+  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", default: "npm")
   -o, --output <output>      SARIF Output filename path (default: "./sarif_output.json")
   -r, --rootDir <rootDir>    Project root directory (default: ".")
   -h, --help                 display help for command
@@ -28,3 +28,4 @@ npm audit --json
 
 - [How To Create An NPM Package](https://www.totaltypescript.com/how-to-create-an-npm-package)
 - [Writing Your Own TypeScript CLI](https://dawchihliou.github.io/articles/writing-your-own-typescript-cli)
+- [bandit: Python Sarif exporter](https://bandit.readthedocs.io/)

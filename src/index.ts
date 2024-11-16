@@ -12,10 +12,8 @@ async function run() {
   const program = new Command();
 
   program
-    .argument('<filename>', 'Json source report path (Nuget/NPM/PIP).')
-    .addOption(
-      new Option('-f, --fileFormat <format>', 'Source file format').choices(['npm', 'nuget', 'pip']).default('npm'),
-    )
+    .argument('<filename>', 'Json source report path (Nuget/NPM).')
+    .addOption(new Option('-f, --fileFormat <format>', 'Source file format').choices(['npm', 'nuget']).default('npm'))
     .option('-o, --output <output>', 'SARIF Output filename path', './sarif_output.json')
     .option('-r, --rootDir <rootDir>', 'Project root directory', '.')
     .parse()
@@ -37,7 +35,7 @@ async function run() {
   if (format == 'npm') exportNpm(filename, options.output, options.rootDir);
   if (format == 'nuget') exportNuget(filename, options.output, options.rootDir);
 
-  console.log(`Output file is written: ${options.output}`);
+  console.log(`Output file is written into: ${options.output}`);
 }
 
 run();
