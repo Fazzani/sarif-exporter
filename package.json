@@ -1,6 +1,6 @@
 {
-  "name": "sarif-exporters",
-  "version": "1.0.1",
+  "name": "sarif-exporter",
+  "version": "1.0.0",
   "description": "SARIF exporter for several audit reports (NPM, NUGET, PIP-AUDIT)",
   "repository": {
     "type": "git",
