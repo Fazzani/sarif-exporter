@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  "cSpell.words": ["SARIF"],
+  "jest.enable": true
+}

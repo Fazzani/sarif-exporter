@@ -1,0 +1,53 @@
+{
+  "name": "sarif-exporter",
+  "version": "1.0.1",
+  "description": "SARIF exporter for several audit reports (NPM, NUGET, PIP-AUDIT)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fazzani/sarif-exporter.git"
+  },
+  "bin": {
+    "sarif-export": "./bin/index.js"
+  },
+  "keywords": [
+    "SARIF",
+    "audit"
+  ],
+  "author": "Heni FAZZANI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fazzani/sarif-exporter/issues"
+  },
+  "homepage": "https://github.com/Fazzani/sarif-exporter#README.md",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup && npm run chmod",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "test": "jest",
+    "chmod": "chmod u+x ./bin/index.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "node-sarif-builder": "^3.2.0"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.3",
+    "@jest/globals": "^29.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
+    "@typescript-eslint/parser": "^8.14.0",
+    "eslint": "^9.14.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
+  },
+  "files": [
+    "dist"
+  ]
+}
