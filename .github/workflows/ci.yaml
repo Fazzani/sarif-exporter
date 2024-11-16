@@ -31,10 +31,15 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
+
       - name: Version
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           echo "VERSION=${GITHUB_REF_NAME:1}" >> "$GITHUB_ENV"
+          echo "$VERSION"
+      - name: Display Version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
           echo "$VERSION"
       - name: Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -42,7 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body: 'Version $VERSION'
+          body: 'Version ${{ VERSION }}'
           files: |
             ./bin/**/js
       - name: Publish
