@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import url from 'url';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
 import NugetVulnerabilitiesReport, { VulnerabilitySeverity } from './nuget.models';
@@ -55,7 +56,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
                 ruleId: ruleId,
                 level: severityMap(v.severity),
                 messageText: msg,
-                fileUri: project.path.replace(rootDir, '/'),
+                fileUri: url.pathToFileURL(project.path.replace(rootDir, '/')).href,
 
                 startLine: 0,
                 startColumn: 0,
