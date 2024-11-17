@@ -16,7 +16,7 @@ async function run() {
     .addOption(new Option('-f, --fileFormat <format>', 'Source file format').choices(['npm', 'nuget']).default('npm'))
     .option('-o, --output <output>', 'SARIF Output filename path', './sarif_output.json')
     .option('-r, --rootDir <rootDir>', 'Project root directory', '.')
-    .option('-r, --debug', 'Enable debug')
+    .option('-d, --debug', 'Enable debug')
     .parse()
     .configureOutput({
       // Visibly override write routines as example!
