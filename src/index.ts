@@ -12,10 +12,11 @@ async function run() {
   const program = new Command();
 
   program
-    .argument('<filename>', 'Json source report path (Nuget/NPM).')
+    .argument('<filename>', 'Json source report path (Nuget/NPM)')
     .addOption(new Option('-f, --fileFormat <format>', 'Source file format').choices(['npm', 'nuget']).default('npm'))
     .option('-o, --output <output>', 'SARIF Output filename path', './sarif_output.json')
     .option('-r, --rootDir <rootDir>', 'Project root directory', '.')
+    .option('-r, --debug', 'Enable debug')
     .parse()
     .configureOutput({
       // Visibly override write routines as example!
@@ -29,11 +30,11 @@ async function run() {
   const options = program.opts();
 
   console.log(
-    `filename: ${filename}, output: ${options.output}, rootDir: ${options.rootDir}, fileFormat: ${options.fileFormat}`,
+    `filename: ${filename}, output: ${options.output}, rootDir: ${options.rootDir}, fileFormat: ${options.fileFormat}, debug: ${options.debug}`,
   );
   const format = (options.fileFormat as string).toLocaleLowerCase();
-  if (format == 'npm') exportNpm(filename, options.output, options.rootDir);
-  if (format == 'nuget') exportNuget(filename, options.output, options.rootDir);
+  if (format == 'npm') exportNpm(filename, options.output, options.rootDir, options.debug !== null);
+  if (format == 'nuget') exportNuget(filename, options.output, options.rootDir, options.debug !== null);
 
   console.log(`Output file is written into: ${options.output}`);
 }

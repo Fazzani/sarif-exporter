@@ -27,7 +27,7 @@ const severityMap = (sev: VulnerabilitySeverity): Result.level => {
   return level;
 };
 
-export default function exportSarif(filename: string, outputFilename: string, rootDir: string) {
+export default function exportSarif(filename: string, outputFilename: string, rootDir: string, debug: boolean = false) {
   const results: NugetVulnerabilitiesReport = JSON.parse(fs.readFileSync(filename, 'utf8'));
 
   // SARIF builder
@@ -70,6 +70,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
 
               sarifResultBuilder.initSimple(sarifResultInit);
               sarifRunBuilder.addResult(sarifResultBuilder);
+              if (debug) console.log(`${JSON.stringify(sarifResultInit)}\n================================`);
             });
           });
       });
@@ -83,6 +84,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
     const parentDirectory = path.dirname(outputFilename);
     if (!fs.existsSync(parentDirectory)) fs.mkdirSync(parentDirectory, { recursive: true });
     fs.writeFileSync(outputFilename, json);
+    if (debug) console.log(json);
   } else {
     console.log(json);
   }
