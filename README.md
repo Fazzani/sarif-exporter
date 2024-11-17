@@ -28,7 +28,7 @@ Options:
 # dotnet cmd generate audit report
 dotnet list project.sln package --vulnerable --include-transitive --format json > audit.json
 # npm audit report
-npm audit --json
+npm audit --json  > audit.json
 ```
 
 ## References
