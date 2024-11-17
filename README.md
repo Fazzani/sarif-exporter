@@ -15,12 +15,13 @@
 Usage: index [options] <filename>
 
 Arguments:
-  filename                   Json source report path (Nuget/NPM).
+  filename                   Json source report path (Nuget/NPM)
 
 Options:
   -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", default: "npm")
   -o, --output <output>      SARIF Output filename path (default: "./sarif_output.json")
   -r, --rootDir <rootDir>    Project root directory (default: ".")
+  -d, --debug                Enable debug
   -h, --help                 display help for command
 ```
 
