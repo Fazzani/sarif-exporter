@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import url from 'url';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
 import NugetVulnerabilitiesReport, { VulnerabilitySeverity } from './nuget.models';
@@ -49,14 +48,13 @@ export default function exportSarif(filename: string, outputFilename: string, ro
           .forEach((pckg) => {
             pckg.vulnerabilities.forEach((v) => {
               const ruleId = 'nuget-audit-' + pckg.id.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-              const msg =
-                'Audit: ' + project.path + ' \n ' + framework.framework + ' \n ' + v.severity + ' \n ' + v.advisoryurl;
+              const msg = `Audit: ${v.severity} \n\t <a href="${v.advisoryurl}">${v.advisoryurl}</a>`;
               const sarifResultBuilder = new SarifResultBuilder();
               const sarifResultInit = {
                 ruleId: ruleId,
                 level: severityMap(v.severity),
                 messageText: msg,
-                fileUri: url.pathToFileURL(project.path).href,
+                fileUri: relative(rootDir, project.path),
 
                 startLine: 0,
                 startColumn: 0,
