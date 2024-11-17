@@ -32,6 +32,8 @@ dotnet list project.sln package --vulnerable --include-transitive --format json 
 npm audit --json  > audit.json
 ```
 
+---
+
 ## References
 
 - [How To Create An NPM Package](https://www.totaltypescript.com/how-to-create-an-npm-package)
