@@ -5,7 +5,7 @@ const config: Config = {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
-  coverageReporters: ['text', 'lcov'],
+  coverageReporters: ['text', 'lcov', 'cobertura'],
   transform: {
     '^.+\\.(t|j)sx?$': 'ts-jest',
   },
