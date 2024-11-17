@@ -1,6 +1,12 @@
 # SARIF exporter
 
-This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET)
+![ci workflow](https://github.com/fazzani/sarif-exporter/actions/workflows/ci.yml/badge.svg)
+
+---
+
+## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET)
+
+## How to use
 
 ```shell
 > sarif-exporter --help
