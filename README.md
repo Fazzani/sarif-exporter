@@ -1,6 +1,6 @@
 # SARIF exporter
 
-![ci workflow](https://github.com/fazzani/sarif-exporter/actions/workflows/ci.yml/badge.svg)
+![ci workflow](https://github.com/Fazzani/sarif-exporter/actions/workflows/ci.yaml/badge.svg)
 
 ---
 
