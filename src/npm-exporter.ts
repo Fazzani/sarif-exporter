@@ -33,7 +33,8 @@ export default function exportSarif(filename: string, outputFilename: string, ro
         continue;
       }
       const via: Via = viaobj as Via;
-      let msg = 'Audit: ' + via.severity + '\n' + via.name + '\n' + via.title + '\n' + via.url;
+      const sep = '\n\t ';
+      let msg = `Vulnerability: ${via.severity} ${via.name} ${sep} ${via.title} ${sep} <a href="${via.url}">${via.url}</a>`;
 
       if (via.cwe.length) {
         for (const cwe of via.cwe) {

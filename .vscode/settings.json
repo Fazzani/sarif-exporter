@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
   "cSpell.words": ["SARIF"],
-  "jest.enable": true
+  "jest.enable": true,
+  "terminal.integrated.defaultProfile.windows": "bash (MSYS2)"
 }
