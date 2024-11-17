@@ -70,7 +70,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
 
               sarifResultBuilder.initSimple(sarifResultInit);
               sarifRunBuilder.addResult(sarifResultBuilder);
-              if (debug) console.log(`${JSON.stringify(sarifResultInit)}\n=================================`);
+              if (debug) console.log(`${JSON.stringify(sarifResultInit)}\n================================`);
             });
           });
       });
