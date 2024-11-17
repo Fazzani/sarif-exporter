@@ -1,18 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import url from 'url';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
 import NugetVulnerabilitiesReport, { VulnerabilitySeverity } from './nuget.models';
-
-export function relative(rootDir: string, fullPath: string) {
-  if (rootDir) {
-    if (fullPath.toLowerCase().startsWith(rootDir.toLowerCase())) {
-      return fullPath.substring(rootDir.length);
-    }
-  }
-  return fullPath;
-}
+import { relative } from 'path';
 
 const severityMap = (sev: VulnerabilitySeverity): Result.level => {
   let level: Result.level = 'error';
@@ -49,14 +40,13 @@ export default function exportSarif(filename: string, outputFilename: string, ro
           .forEach((pckg) => {
             pckg.vulnerabilities.forEach((v) => {
               const ruleId = 'nuget-audit-' + pckg.id.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-              const msg =
-                'Audit: ' + project.path + ' \n ' + framework.framework + ' \n ' + v.severity + ' \n ' + v.advisoryurl;
+              const msg = `Vulnerability: ${v.severity} \n\t <a href="${v.advisoryurl}">${v.advisoryurl}</a>`;
               const sarifResultBuilder = new SarifResultBuilder();
               const sarifResultInit = {
                 ruleId: ruleId,
                 level: severityMap(v.severity),
                 messageText: msg,
-                fileUri: url.pathToFileURL(project.path).href,
+                fileUri: 'file:///' + relative(rootDir.replaceAll('\\', '/'), project.path).replaceAll('\\', '/'),
 
                 startLine: 0,
                 startColumn: 0,
