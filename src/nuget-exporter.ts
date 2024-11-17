@@ -55,7 +55,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
                 ruleId: ruleId,
                 level: severityMap(v.severity),
                 messageText: msg,
-                fileUri: project.path,
+                fileUri: project.path.replace(rootDir, '/'),
 
                 startLine: 0,
                 startColumn: 0,
