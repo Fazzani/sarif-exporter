@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
-import ComposerVulnerabilitiesReport, { Advisor, VulnerabilitySeverity } from './composer.models';
+import { Advisor, VulnerabilitySeverity } from './composer.models';
 import { relative } from 'path';
 
 const severityMap = (sev: VulnerabilitySeverity): Result.level => {
