@@ -1,58 +1,46 @@
 import fs from 'fs';
+import path from 'path';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
-import { relative, Via } from './common';
-import path from 'path';
+import ComposerVulnerabilitiesReport, { VulnerabilitySeverity } from './composer.models';
+import { relative } from 'path';
+
+const severityMap = (sev: VulnerabilitySeverity): Result.level => {
+  let level: Result.level = 'error';
+  if (sev == 'medium') {
+    level = 'note';
+  }
+  if (sev == 'high') {
+    level = 'warning';
+  }
+  if (sev == 'critical') {
+    level = 'error';
+  }
+  return level;
+};
 
 export default function exportSarif(filename: string, outputFilename: string, rootDir: string, debug: boolean = false) {
-  const results = JSON.parse(fs.readFileSync(filename, 'utf8'));
+  const results: ComposerVulnerabilitiesReport = JSON.parse(fs.readFileSync(filename, 'utf8'));
 
   // SARIF builder
   const sarifBuilder = new SarifBuilder();
 
   // SARIF Run builder
   const sarifRunBuilder = new SarifRunBuilder().initSimple({
-    toolDriverName: 'npm-audit-sarif',
+    toolDriverName: 'composer-audit-sarif',
     toolDriverVersion: '0.0.1',
   });
-
-  for (const key in results.vulnerabilities) {
-    const value = results.vulnerabilities[key];
-
-    for (const viaobj of value.via) {
-      if (typeof viaobj == 'string') {
-        continue;
-      }
-      const via: Via = viaobj as Via;
-      const sep = '\n\t ';
-      let msg = `Vulnerability: ${via.severity} ${via.name} ${sep} ${via.title} ${sep} <a href="${via.url}">${via.url}</a>`;
-
-      if (via.cwe.length) {
-        for (const cwe of via.cwe) {
-          msg += '\n';
-          msg += cwe;
-        }
-      }
-
-      let level: Result.level = 'error';
-      if (via.severity == 'moderate') {
-        level = 'note';
-      }
-      if (via.severity == 'high') {
-        level = 'warning';
-      }
-      if (via.severity == 'critical') {
-        level = 'error';
-      }
-
-      const ruleId = 'npm-audit-' + key.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-
+  results.advisories['guzzlehttp/guzzle']
+    .filter((x) => x)
+    .forEach((pckg) => {
+      const ruleId = 'composer-audit-' + pckg.packageName.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
+      const msg = `Vulnerability: ${pckg.title} \n\t ${pckg.cve} \n\t affectedVersions : ${pckg.affectedVersions} <a href="${pckg.link}">${pckg.link}</a>`;
       const sarifResultBuilder = new SarifResultBuilder();
       const sarifResultInit = {
         ruleId: ruleId,
-        level: level,
+        level: severityMap(pckg.severity),
         messageText: msg,
-        fileUri: relative(rootDir, 'package.json'),
+        fileUri: relative(rootDir, 'composer.json'),
 
         startLine: 0,
         startColumn: 0,
@@ -67,9 +55,10 @@ export default function exportSarif(filename: string, outputFilename: string, ro
 
       sarifResultBuilder.initSimple(sarifResultInit);
       sarifRunBuilder.addResult(sarifResultBuilder);
-      if (debug) console.log(`${JSON.stringify(sarifResultInit)}\n================================`);
-    }
-  }
+      if (debug) {
+        console.log(`${JSON.stringify(sarifResultInit)}\n================================`);
+      }
+    });
 
   sarifBuilder.addRun(sarifRunBuilder);
 

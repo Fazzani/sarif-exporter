@@ -15,21 +15,25 @@
 Usage: index [options] <filename>
 
 Arguments:
-  filename                   Json source report path (Nuget/NPM)
+  filename                   Json source report path (Nuget/NPM/Composer(php))
 
 Options:
-  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", default: "npm")
+  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", "composer", default: "npm")
   -o, --output <output>      SARIF Output filename path (default: "./sarif_output.json")
   -r, --rootDir <rootDir>    Project root directory (default: ".")
   -d, --debug                Enable debug
   -h, --help                 display help for command
 ```
 
+## Accepted input files CLI
+
 ```shell
 # dotnet cmd generate audit report
 dotnet list project.sln package --vulnerable --include-transitive --format json > audit.json
 # npm audit report
 npm audit --json  > audit.json
+# composer (php) audit report
+composer audit --format=json
 ```
 
 ---

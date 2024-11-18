@@ -23,3 +23,12 @@ export function minVal(val: number) {
   }
   return 1;
 }
+
+export function relative(rootDir: string, fullPath: string) {
+  if (rootDir) {
+    if (fullPath.toLowerCase().startsWith(rootDir.toLowerCase())) {
+      return fullPath.substring(rootDir.length);
+    }
+  }
+  return fullPath;
+}

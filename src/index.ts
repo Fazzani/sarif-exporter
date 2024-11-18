@@ -2,6 +2,7 @@
 import { Command, Option } from 'commander';
 import exportNpm from './npm-exporter';
 import exportNuget from './nuget-exporter';
+import exportComposer from './composer-exporter';
 
 const errorColor = (
   str: string,
@@ -12,8 +13,12 @@ async function run() {
   const program = new Command();
 
   program
-    .argument('<filename>', 'Json source report path (Nuget/NPM)')
-    .addOption(new Option('-f, --fileFormat <format>', 'Source file format').choices(['npm', 'nuget']).default('npm'))
+    .argument('<filename>', 'Json source report path (Nuget/NPM/Composer(php))')
+    .addOption(
+      new Option('-f, --fileFormat <format>', 'Source file format')
+        .choices(['npm', 'nuget', 'composer'])
+        .default('npm'),
+    )
     .option('-o, --output <output>', 'SARIF Output filename path', './sarif_output.json')
     .option('-r, --rootDir <rootDir>', 'Project root directory', '.')
     .option('-d, --debug', 'Enable debug')
@@ -35,6 +40,7 @@ async function run() {
   const format = (options.fileFormat as string).toLocaleLowerCase();
   if (format == 'npm') exportNpm(filename, options.output, options.rootDir, options.debug !== null);
   if (format == 'nuget') exportNuget(filename, options.output, options.rootDir, options.debug !== null);
+  if (format == 'exportComposer') exportComposer(filename, options.output, options.rootDir, options.debug !== null);
 
   console.log(`Output file is written into: ${options.output}`);
 }
