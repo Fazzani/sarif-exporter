@@ -3,10 +3,10 @@ export default interface ComposerVulnerabilitiesReport {
 }
 
 export interface Advisories {
-  'guzzlehttp/guzzle': GuzzlehttpGuzzle[];
+  'guzzlehttp/guzzle': Advisor[];
 }
 
-export interface GuzzlehttpGuzzle {
+export interface Advisor {
   title: string;
   cve: string;
   link: string;

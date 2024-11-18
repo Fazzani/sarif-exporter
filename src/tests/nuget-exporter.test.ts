@@ -5,8 +5,10 @@ import path from 'path';
 
 describe('Nuget exporter exportSarif module', () => {
   test('minimal file', () => {
-    const outputFilePath = path.join(__dirname, './tmp/output/nuget-exporter.json');
+    const outputFilePath = path.join(__dirname, '../../tmp/output/nuget-exporter.json');
     exportSarif('./src/tests/data/nuget-exporter.json', outputFilePath, '');
-    expect(fs.existsSync(outputFilePath));
+    expect(fs.existsSync(outputFilePath)).toBe(true);
+    var stats = fs.statSync(outputFilePath);
+    expect(stats.size).toBeGreaterThan(1024);
   });
 });

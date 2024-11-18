@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { describe, expect, test } from '@jest/globals';
-import exportSarif from '../npm-exporter';
+import exportSarif from '../composer-exporter';
 import path from 'path';
 
-describe('Npm exporter exportSarif module', () => {
+describe('Composer exporter exportSarif module', () => {
   test('minimal file', () => {
-    const outputFilePath = path.join(__dirname, '../../tmp/output/npm-exporter.json');
-    exportSarif('./src/tests/data/npm-exporter.json', outputFilePath, '');
+    const outputFilePath = path.join(__dirname, '../../tmp/output/composer-exporter.json');
+    exportSarif('./src/tests/data/composer-exporter.json', outputFilePath, '');
     expect(fs.existsSync(outputFilePath)).toBe(true);
     var stats = fs.statSync(outputFilePath);
     expect(stats.size).toBeGreaterThan(1024);
