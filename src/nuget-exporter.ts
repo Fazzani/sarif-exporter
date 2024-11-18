@@ -39,27 +39,26 @@ export default function exportSarif(filename: string, outputFilename: string, ro
           .filter((x) => x.vulnerabilities)
           .forEach((pckg) => {
             pckg.vulnerabilities.forEach((v) => {
-              const ruleId = 'nuget-audit-' + pckg.id.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-              const msg = `Vulnerability: ${v.severity} \n\t <a href="${v.advisoryurl}">${v.advisoryurl}</a>`;
+              const ruleId = 'nuget-dep-audit-' + pckg.id.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
+              const msg = `Vulnerability: ${v.severity} \\n advisor ${v.advisoryurl}`;
               const sarifResultBuilder = new SarifResultBuilder();
               const sarifResultInit = {
                 ruleId: ruleId,
                 level: severityMap(v.severity),
                 messageText: msg,
-                fileUri: 'file:///' + relative(rootDir.replaceAll('\\', '/'), project.path).replaceAll('\\', '/'),
+                // fileUri: 'file:///' + relative(rootDir.replaceAll('\\', '/'), project.path).replaceAll('\\', '/'),
 
-                startLine: 0,
-                startColumn: 0,
-                endLine: 0,
-                endColumn: 0,
+                startLine: 1,
+                startColumn: 1,
+                endLine: 1,
+                endColumn: 1,
               };
 
-              sarifResultInit.startLine = 1;
-              sarifResultInit.startColumn = 1;
-              sarifResultInit.endLine = 1;
-              sarifResultInit.endColumn = 1;
-
               sarifResultBuilder.initSimple(sarifResultInit);
+              sarifResultBuilder.setLocationArtifactUri({
+                uri: relative(rootDir.replaceAll('\\', '/'), project.path).replaceAll('\\', '/'),
+                uriBaseId: 'ROOTPATH',
+              });
               sarifRunBuilder.addResult(sarifResultBuilder);
               if (debug) {
                 console.log(`rootDir: ${rootDir.replaceAll('\\', '/')}`);
