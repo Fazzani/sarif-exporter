@@ -8,7 +8,7 @@ describe('Composer exporter exportSarif module', () => {
     const outputFilePath = path.join(__dirname, '../../tmp/output/composer-exporter.json');
     exportSarif('./src/tests/data/composer-exporter.json', outputFilePath, '');
     expect(fs.existsSync(outputFilePath)).toBe(true);
-    var stats = fs.statSync(outputFilePath);
+    const stats = fs.statSync(outputFilePath);
     expect(stats.size).toBeGreaterThan(1024);
   });
 });
