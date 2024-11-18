@@ -25,7 +25,7 @@ export default [
       'eslint-plugin-prettier': eslintPluginPrettierRecommended,
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'none',
+      '@typescript-eslint/no-explicit-any': 'warn',
       'prettier/prettier': [
         'error',
         {
