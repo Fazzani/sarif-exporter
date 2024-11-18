@@ -25,7 +25,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
       }
       const via: Via = viaobj as Via;
       const sep = '\n\t ';
-      let msg = `Vulnerability: ${via.severity} ${via.name} ${sep} ${via.title} ${sep} <a href="${via.url}">${via.url}</a>`;
+      let msg = `Vulnerability: ${via.severity} ${via.name} ${sep} ${via.title} ${sep} advisor ${via.url}`;
 
       if (via.cwe.length) {
         for (const cwe of via.cwe) {
@@ -45,7 +45,7 @@ export default function exportSarif(filename: string, outputFilename: string, ro
         level = 'error';
       }
 
-      const ruleId = 'npm-audit-' + key.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
+      const ruleId = 'npm-dep-audit-' + key.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
 
       const sarifResultBuilder = new SarifResultBuilder();
       const sarifResultInit = {
@@ -54,16 +54,11 @@ export default function exportSarif(filename: string, outputFilename: string, ro
         messageText: msg,
         fileUri: relative(rootDir, 'package.json'),
 
-        startLine: 0,
-        startColumn: 0,
-        endLine: 0,
-        endColumn: 0,
+        startLine: 1,
+        startColumn: 1,
+        endLine: 1,
+        endColumn: 1,
       };
-
-      sarifResultInit.startLine = 1;
-      sarifResultInit.startColumn = 1;
-      sarifResultInit.endLine = 1;
-      sarifResultInit.endColumn = 1;
 
       sarifResultBuilder.initSimple(sarifResultInit);
       sarifRunBuilder.addResult(sarifResultBuilder);

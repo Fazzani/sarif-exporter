@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
-import ComposerVulnerabilitiesReport, { Advisor, VulnerabilitySeverity } from './composer.models';
+import { Advisor, VulnerabilitySeverity } from './composer.models';
 import { relative } from 'path';
 
 const severityMap = (sev: VulnerabilitySeverity): Result.level => {
@@ -36,8 +36,8 @@ export default function exportSarif(filename: string, outputFilename: string, ro
     const packages = value as Advisor[];
     packages.forEach((pckg) => {
       if (pckg?.packageName) {
-        const ruleId = 'composer-audit-' + pckg.packageName.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
-        const msg = `Vulnerability: ${advisor} ${pckg.title} \n\t ${pckg.cve} \n\t affectedVersions : ${pckg.affectedVersions} <a href="${pckg.link}">${pckg.link}</a>`;
+        const ruleId = 'composer-dep-audit-' + pckg.packageName.toLowerCase().replaceAll('_', '-').replaceAll(' ', '-');
+        const msg = `Vulnerability: ${advisor} ${pckg.title} \n\t ${pckg.cve} \n\t affectedVersions : ${pckg.affectedVersions} advisor ${pckg.link}`;
         const sarifResultBuilder = new SarifResultBuilder();
         const sarifResultInit = {
           ruleId: ruleId,
@@ -45,16 +45,11 @@ export default function exportSarif(filename: string, outputFilename: string, ro
           messageText: msg,
           fileUri: relative(rootDir, 'composer.json'),
 
-          startLine: 0,
-          startColumn: 0,
-          endLine: 0,
-          endColumn: 0,
+          startLine: 1,
+          startColumn: 1,
+          endLine: 1,
+          endColumn: 1,
         };
-
-        sarifResultInit.startLine = 1;
-        sarifResultInit.startColumn = 1;
-        sarifResultInit.endLine = 1;
-        sarifResultInit.endColumn = 1;
 
         sarifResultBuilder.initSimple(sarifResultInit);
         sarifRunBuilder.addResult(sarifResultBuilder);
