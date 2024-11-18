@@ -4,11 +4,11 @@
   "sources": [
     "https://api.nuget.org/v3/index.json",
     "https://pkgs.dev.azure.com/up-group/_packaging/packages/nuget/v3/index.json",
-    "C:/Program Files (x86)/Microsoft SDKs/NuGetPackages/"
+    "C:/a/1/s/Program Files (x86)/Microsoft SDKs/NuGetPackages/"
   ],
   "projects": [
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Services/XXX.WebApi.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.Services/XXX.WebApi.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Core/XXX.Core.csproj",
+      "path": "C:/a/1/s/a/1/s/ODI.Commercant.Services/ODI.Commercant.AffiliateFunctions.Tests/ODI.Commercant.AffiliateFunctions.Tests.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -124,7 +124,7 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Domain/XXX.Domain.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.Domain/XXX.Domain.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -144,84 +144,10 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Core.Tests/XXX.Core.Tests.csproj"
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.Core.Tests/XXX.Core.Tests.csproj"
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Storage/XXX.Storage.csproj",
-      "frameworks": [
-        {
-          "framework": "net8.0",
-          "transitivePackages": [
-            {
-              "id": "System.Data.SqlClient",
-              "resolvedVersion": "4.8.3",
-              "vulnerabilities": [
-                {
-                  "severity": "Moderate",
-                  "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
-                },
-                {
-                  "severity": "High",
-                  "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
-                }
-              ]
-            },
-            {
-              "id": "System.Formats.Asn1",
-              "resolvedVersion": "6.0.0",
-              "vulnerabilities": [
-                {
-                  "severity": "High",
-                  "advisoryurl": "https://github.com/advisories/GHSA-447r-wph3-92pm"
-                }
-              ]
-            },
-            {
-              "id": "System.Security.Cryptography.Pkcs",
-              "resolvedVersion": "6.0.0",
-              "vulnerabilities": [
-                {
-                  "severity": "High",
-                  "advisoryurl": "https://github.com/advisories/GHSA-555c-2p6r-68mm"
-                }
-              ]
-            },
-            {
-              "id": "System.Security.Cryptography.Xml",
-              "resolvedVersion": "6.0.0",
-              "vulnerabilities": [
-                {
-                  "severity": "Moderate",
-                  "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
-                }
-              ]
-            },
-            {
-              "id": "System.Text.Json",
-              "resolvedVersion": "6.0.9",
-              "vulnerabilities": [
-                {
-                  "severity": "High",
-                  "advisoryurl": "https://github.com/advisories/GHSA-8g4q-xg66-9fp4"
-                }
-              ]
-            },
-            {
-              "id": "System.Text.RegularExpressions",
-              "resolvedVersion": "4.3.0",
-              "vulnerabilities": [
-                {
-                  "severity": "High",
-                  "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.Storage.Tests/XXX.Storage.Tests.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.Storage/XXX.Storage.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -295,10 +221,84 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.BMCProxy/XXX.BMCProxy.csproj"
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.Storage.Tests/XXX.Storage.Tests.csproj",
+      "frameworks": [
+        {
+          "framework": "net8.0",
+          "transitivePackages": [
+            {
+              "id": "System.Data.SqlClient",
+              "resolvedVersion": "4.8.3",
+              "vulnerabilities": [
+                {
+                  "severity": "Moderate",
+                  "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
+                },
+                {
+                  "severity": "High",
+                  "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+                }
+              ]
+            },
+            {
+              "id": "System.Formats.Asn1",
+              "resolvedVersion": "6.0.0",
+              "vulnerabilities": [
+                {
+                  "severity": "High",
+                  "advisoryurl": "https://github.com/advisories/GHSA-447r-wph3-92pm"
+                }
+              ]
+            },
+            {
+              "id": "System.Security.Cryptography.Pkcs",
+              "resolvedVersion": "6.0.0",
+              "vulnerabilities": [
+                {
+                  "severity": "High",
+                  "advisoryurl": "https://github.com/advisories/GHSA-555c-2p6r-68mm"
+                }
+              ]
+            },
+            {
+              "id": "System.Security.Cryptography.Xml",
+              "resolvedVersion": "6.0.0",
+              "vulnerabilities": [
+                {
+                  "severity": "Moderate",
+                  "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+                }
+              ]
+            },
+            {
+              "id": "System.Text.Json",
+              "resolvedVersion": "6.0.9",
+              "vulnerabilities": [
+                {
+                  "severity": "High",
+                  "advisoryurl": "https://github.com/advisories/GHSA-8g4q-xg66-9fp4"
+                }
+              ]
+            },
+            {
+              "id": "System.Text.RegularExpressions",
+              "resolvedVersion": "4.3.0",
+              "vulnerabilities": [
+                {
+                  "severity": "High",
+                  "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.AffiliateFunctions.Tests/XXX.AffiliateFunctions.Tests.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.BMCProxy/XXX.BMCProxy.csproj"
+    },
+    {
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.AffiliateFunctions.Tests/XXX.AffiliateFunctions.Tests.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -376,7 +376,7 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.DepositService/XXX.DepositService.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.DepositService/XXX.DepositService.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -416,7 +416,7 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/XXX.EventPublisher/XXX.Framework.EventPublisher.csproj",
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/XXX.EventPublisher/XXX.Framework.EventPublisher.csproj",
       "frameworks": [
         {
           "framework": "net8.0",
@@ -436,7 +436,7 @@
       ]
     },
     {
-      "path": "C:/France.Services.XXX/XXX.Services/Testcontainers.Azurite/Testcontainers.Azurite.csproj"
+      "path": "C:/a/1/s/France.Services.XXX/XXX.Services/Testcontainers.Azurite/Testcontainers.Azurite.csproj"
     }
   ]
 }
