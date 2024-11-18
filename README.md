@@ -33,7 +33,7 @@ dotnet list project.sln package --vulnerable --include-transitive --format json 
 # npm audit report
 npm audit --json  > audit.json
 # composer (php) audit report
-composer audit --format=json
+composer audit --format=json  > audit.json
 ```
 
 ---
