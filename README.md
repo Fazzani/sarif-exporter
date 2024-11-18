@@ -33,7 +33,7 @@ dotnet list project.sln package --vulnerable --include-transitive --format json 
 # npm audit report
 npm audit --json  > audit.json
 # composer (php) audit report
-composer audit --format=json
+composer audit --format=json  > audit.json
 ```
 
 ---
@@ -43,3 +43,4 @@ composer audit --format=json
 - [How To Create An NPM Package](https://www.totaltypescript.com/how-to-create-an-npm-package)
 - [Writing Your Own TypeScript CLI](https://dawchihliou.github.io/articles/writing-your-own-typescript-cli)
 - [bandit: Python Sarif exporter](https://bandit.readthedocs.io/)
+- [KICS for infrastructure](https://www.kics.io/#supportedplatforms)
