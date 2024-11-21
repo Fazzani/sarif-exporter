@@ -5,7 +5,7 @@
 
 ---
 
-## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET)
+## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET, COMPOSER)
 
 ## How to use
 
