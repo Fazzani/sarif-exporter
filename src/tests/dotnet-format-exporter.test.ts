@@ -79,4 +79,52 @@ describe('Dotnet format exporter exportSarif module', () => {
     expect(analyzerRule?.defaultConfiguration?.level).toBe('warning');
     expect(analyzerRule?.properties?.category).toBe('analyzer');
   });
+
+  test('handles empty diagnostics array', () => {
+    const outputFilePath = path.join(__dirname, '../../tmp/output/dotnet-format-empty.json');
+    exportSarif('./src/tests/data/dotnet-format-empty.json', outputFilePath, '.');
+
+    expect(fs.existsSync(outputFilePath)).toBe(true);
+    const sarifContent: Log = JSON.parse(fs.readFileSync(outputFilePath, 'utf8'));
+
+    // Should still have valid SARIF structure
+    expect(sarifContent.version).toBe('2.1.0');
+    expect(sarifContent.runs).toBeDefined();
+    expect(sarifContent.runs.length).toBe(1);
+
+    const run = sarifContent.runs[0];
+    expect(run.tool.driver.name).toBe('dotnet format');
+
+    // Should have no results and empty/no rules
+    expect(run.results).toBeDefined();
+    expect(run.results?.length).toBe(0);
+    // Rules can be empty array or undefined when no diagnostics
+    if (run.tool.driver.rules) {
+      expect(run.tool.driver.rules.length).toBe(0);
+    }
+  });
+
+  test('handles missing diagnostics property', () => {
+    const outputFilePath = path.join(__dirname, '../../tmp/output/dotnet-format-no-diagnostics.json');
+    exportSarif('./src/tests/data/dotnet-format-no-diagnostics.json', outputFilePath, '.');
+
+    expect(fs.existsSync(outputFilePath)).toBe(true);
+    const sarifContent: Log = JSON.parse(fs.readFileSync(outputFilePath, 'utf8'));
+
+    // Should still have valid SARIF structure
+    expect(sarifContent.version).toBe('2.1.0');
+    expect(sarifContent.runs).toBeDefined();
+    expect(sarifContent.runs.length).toBe(1);
+
+    const run = sarifContent.runs[0];
+    expect(run.tool.driver.name).toBe('dotnet format');
+
+    // Should have no results and empty/no rules
+    expect(run.results).toBeDefined();
+    expect(run.results?.length).toBe(0);
+    // Rules can be empty array or undefined when no diagnostics
+    if (run.tool.driver.rules) {
+      expect(run.tool.driver.rules.length).toBe(0);
+    }
+  });
 });
