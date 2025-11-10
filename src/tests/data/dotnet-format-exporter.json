@@ -1,0 +1,45 @@
+{
+  "version": "8.0.100",
+  "diagnostics": [
+    {
+      "filePath": "Program.cs",
+      "startLine": 12,
+      "startColumn": 5,
+      "endLine": 12,
+      "endColumn": 20,
+      "ruleId": "IDE0055",
+      "category": "style",
+      "message": "Fix formatting issue"
+    },
+    {
+      "filePath": "Controllers/UserController.cs",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 25,
+      "endColumn": 10,
+      "ruleId": "IDE0005",
+      "category": "style",
+      "message": "Remove unnecessary imports"
+    },
+    {
+      "filePath": "Services/DataService.cs",
+      "startLine": 45,
+      "startColumn": 8,
+      "endLine": 45,
+      "endColumn": 15,
+      "ruleId": "IDE0001",
+      "category": "analyzer",
+      "message": "Simplify name"
+    },
+    {
+      "filePath": "Helpers/StringHelper.cs",
+      "startLine": 10,
+      "startColumn": 1,
+      "endLine": 10,
+      "endColumn": 1,
+      "ruleId": "IDE0055",
+      "category": "whitespace",
+      "message": "Fix whitespace"
+    }
+  ]
+}

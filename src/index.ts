@@ -3,6 +3,7 @@ import { Command, Option } from 'commander';
 import exportNpm from './npm-exporter';
 import exportNuget from './nuget-exporter';
 import exportComposer from './composer-exporter';
+import exportDotnetFormat from './dotnet-format-exporter';
 
 const errorColor = (
   str: string,
@@ -13,15 +14,16 @@ async function run() {
   const program = new Command();
 
   program
-    .argument('<filename>', 'Json source report path (Nuget/NPM/Composer(php))')
+    .argument('<filename>', 'Json source report path (Nuget/NPM/Composer(php)/dotnet format)')
     .addOption(
       new Option('-f, --fileFormat <format>', 'Source file format')
-        .choices(['npm', 'nuget', 'composer'])
+        .choices(['npm', 'nuget', 'composer', 'dotnet-format'])
         .default('npm'),
     )
     .option('-o, --output <output>', 'SARIF Output filename path', './sarif_output.json')
     .option('-r, --rootDir <rootDir>', 'Project root directory', '.')
     .option('-d, --debug', 'Enable debug')
+    .option('-m, --minify', 'Minify SARIF output (no indentation)')
     .parse()
     .configureOutput({
       // Visibly override write routines as example!
@@ -35,12 +37,17 @@ async function run() {
   const options = program.opts();
 
   console.log(
-    `filename: ${filename}, output: ${options.output}, rootDir: ${options.rootDir}, fileFormat: ${options.fileFormat}, debug: ${options.debug}`,
+    `filename: ${filename}, output: ${options.output}, rootDir: ${options.rootDir}, fileFormat: ${options.fileFormat}, debug: ${options.debug}, minify: ${options.minify}`,
   );
   const format = (options.fileFormat as string).toLocaleLowerCase();
-  if (format == 'npm') exportNpm(filename, options.output, options.rootDir, options.debug !== null);
-  if (format == 'nuget') exportNuget(filename, options.output, options.rootDir, options.debug !== null);
-  if (format == 'exportComposer') exportComposer(filename, options.output, options.rootDir, options.debug !== null);
+  const debugEnabled = options.debug !== undefined && options.debug !== null;
+  const minifyEnabled = options.minify !== undefined && options.minify !== null;
+
+  if (format == 'npm') exportNpm(filename, options.output, options.rootDir, debugEnabled);
+  if (format == 'nuget') exportNuget(filename, options.output, options.rootDir, debugEnabled);
+  if (format == 'composer') exportComposer(filename, options.output, options.rootDir, debugEnabled);
+  if (format == 'dotnet-format')
+    exportDotnetFormat(filename, options.output, options.rootDir, debugEnabled, minifyEnabled);
 
   console.log(`Output file is written into: ${options.output}`);
 }
