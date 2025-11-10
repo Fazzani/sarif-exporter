@@ -49,8 +49,9 @@ export default function exportSarif(
   // Track unique rules to add them to the driver
   const seenRules = new Set<string>();
 
-  // Process each diagnostic
-  report.diagnostics.forEach((diagnostic) => {
+  // Process each diagnostic (handle missing or undefined diagnostics)
+  const diagnostics = report.diagnostics || [];
+  diagnostics.forEach((diagnostic) => {
     const ruleId = diagnostic.ruleId;
     const level = categoryToLevel(diagnostic.category);
 
