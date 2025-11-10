@@ -1,23 +1,40 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { SarifBuilder, SarifResultBuilder, SarifRunBuilder, SarifRuleBuilder } from 'node-sarif-builder';
 import { Result } from 'sarif';
-import { DotnetFormatReport, DiagnosticCategory } from './dotnet-format.models';
+import { DotnetFormatReport } from './dotnet-format.models';
 
 /**
- * Maps dotnet format diagnostic category to SARIF severity level
+ * Adds a rule to the SARIF run builder if not already seen
  */
-const categoryToLevel = (category: DiagnosticCategory): Result.level => {
-  switch (category) {
-    case 'style':
-    case 'whitespace':
-      return 'note';
-    case 'analyzer':
-      return 'warning';
-    default:
-      return 'note';
+function addRuleIfNeeded(
+  ruleId: string,
+  description: string,
+  seenRules: Set<string>,
+  sarifRunBuilder: SarifRunBuilder,
+  debug: boolean,
+) {
+  if (!seenRules.has(ruleId)) {
+    seenRules.add(ruleId);
+
+    const ruleBuilder = new SarifRuleBuilder();
+    ruleBuilder.initSimple({
+      ruleId: ruleId,
+      shortDescriptionText: description,
+      fullDescriptionText: description,
+    });
+
+    ruleBuilder.rule.defaultConfiguration = {
+      level: 'note' as Result.level,
+    };
+
+    sarifRunBuilder.addRule(ruleBuilder);
+
+    if (debug) {
+      console.log(`Added rule: ${ruleId}`);
+    }
   }
-};
+}
 
 /**
  * Exports dotnet format JSON report to SARIF 2.1.0 format
@@ -42,66 +59,41 @@ export default function exportSarif(
   // SARIF Run builder with dotnet format tool information
   const sarifRunBuilder = new SarifRunBuilder().initSimple({
     toolDriverName: 'dotnet format',
-    toolDriverVersion: report.version || 'unknown',
+    toolDriverVersion: 'unknown',
     url: 'https://learn.microsoft.com/dotnet/core/tools/dotnet-format',
   });
 
   // Track unique rules to add them to the driver
   const seenRules = new Set<string>();
 
-  // Process each diagnostic
-  report.diagnostics.forEach((diagnostic) => {
-    const ruleId = diagnostic.ruleId;
-    const level = categoryToLevel(diagnostic.category);
+  // Process each diagnostic entry
+  for (const diagnostic of report) {
+    // Process each file change within the diagnostic
+    for (const change of diagnostic.FileChanges) {
+      const ruleId = change.DiagnosticId;
+      const level = 'note' as Result.level;
 
-    // Add rule if not seen before
-    if (!seenRules.has(ruleId)) {
-      seenRules.add(ruleId);
+      addRuleIfNeeded(ruleId, change.FormatDescription, seenRules, sarifRunBuilder, debug);
 
-      const ruleBuilder = new SarifRuleBuilder();
-      ruleBuilder.initSimple({
+      // Create result for this file change
+      const sarifResultBuilder = new SarifResultBuilder();
+      const sarifResultInit = {
         ruleId: ruleId,
-        shortDescriptionText: diagnostic.message,
-        fullDescriptionText: `Format code to follow ${diagnostic.category} conventions`,
-      });
-
-      // Set default configuration level
-      ruleBuilder.rule.defaultConfiguration = {
         level: level,
+        messageText: change.FormatDescription,
+        fileUri: diagnostic.FilePath.replaceAll('\\', '/'),
+        startLine: change.LineNumber,
+        startColumn: change.CharNumber,
       };
 
-      // Add category as property
-      ruleBuilder.rule.properties = {
-        category: diagnostic.category,
-      };
-
-      sarifRunBuilder.addRule(ruleBuilder);
+      sarifResultBuilder.initSimple(sarifResultInit);
+      sarifRunBuilder.addResult(sarifResultBuilder);
 
       if (debug) {
-        console.log(`Added rule: ${ruleId} (${diagnostic.category}) with level: ${level}`);
+        console.log(`Added result for ${diagnostic.FilePath}:${change.LineNumber}:${change.CharNumber}`);
       }
     }
-
-    // Create result for this diagnostic
-    const sarifResultBuilder = new SarifResultBuilder();
-    const sarifResultInit = {
-      ruleId: ruleId,
-      level: level,
-      messageText: diagnostic.message,
-      fileUri: diagnostic.filePath.replace(/\\/g, '/'),
-      startLine: diagnostic.startLine,
-      startColumn: diagnostic.startColumn,
-      endLine: diagnostic.endLine,
-      endColumn: diagnostic.endColumn,
-    };
-
-    sarifResultBuilder.initSimple(sarifResultInit);
-    sarifRunBuilder.addResult(sarifResultBuilder);
-
-    if (debug) {
-      console.log(`Added result for ${diagnostic.filePath}:${diagnostic.startLine}:${diagnostic.startColumn}`);
-    }
-  });
+  }
 
   sarifBuilder.addRun(sarifRunBuilder);
 

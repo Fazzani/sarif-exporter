@@ -2,5 +2,6 @@
   "editor.formatOnSave": true,
   "cSpell.words": ["SARIF"],
   "jest.enable": true,
-  "terminal.integrated.defaultProfile.windows": "bash (MSYS2)"
+  "terminal.integrated.defaultProfile.windows": "bash (MSYS2)",
+  "jest.runMode": "on-demand"
 }

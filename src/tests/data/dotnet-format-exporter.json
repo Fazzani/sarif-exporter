@@ -1,45 +1,38 @@
-{
-  "version": "8.0.100",
-  "diagnostics": [
-    {
-      "filePath": "Program.cs",
-      "startLine": 12,
-      "startColumn": 5,
-      "endLine": 12,
-      "endColumn": 25,
-      "ruleId": "IDE0055",
-      "category": "style",
-      "message": "Fix formatting issue"
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "023860ac-5a05-4c82-ace6-fdeee5728114"
+      },
+      "Id": "99c1bd74-57cf-4c5b-bdce-633e7b8740b0"
     },
-    {
-      "filePath": "Controllers/UserController.cs",
-      "startLine": 25,
-      "startColumn": 1,
-      "endLine": 25,
-      "endColumn": 1,
-      "ruleId": "IDE0055",
-      "category": "whitespace",
-      "message": "Fix whitespace"
+    "FileName": "AdvertisementService.cs",
+    "FilePath": "D:\\Work\\repos\\Up.France.Commercant.BO\\Up.France.Commercant.BO.Services\\Advertisements\\AdvertisementService.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "IMPORTS",
+        "FormatDescription": "Corrigez le classement des importations."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "70259323-6bab-49ee-b652-158b32e1cd4a"
+      },
+      "Id": "23b113b9-db1b-428f-93bd-6ecb1a57b854"
     },
-    {
-      "filePath": "Services/DataService.cs",
-      "startLine": 45,
-      "startColumn": 13,
-      "endLine": 45,
-      "endColumn": 30,
-      "ruleId": "CA1822",
-      "category": "analyzer",
-      "message": "Member 'GetData' does not access instance data and can be marked as static"
-    },
-    {
-      "filePath": "Models/User.cs",
-      "startLine": 8,
-      "startColumn": 9,
-      "endLine": 8,
-      "endColumn": 15,
-      "ruleId": "IDE0055",
-      "category": "style",
-      "message": "Fix formatting issue"
-    }
-  ]
-}
+    "FileName": "AffiliationModerationCardVm.cs",
+    "FilePath": "D:\\Work\\repos\\Up.France.Commercant.BO\\Up.France.Commercant.BO.Domain\\ViewModels\\Affiliation\\AffiliationModerationCardVm.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "IMPORTS",
+        "FormatDescription": "Corrigez le classement des importations."
+      }
+    ]
+  }
+]

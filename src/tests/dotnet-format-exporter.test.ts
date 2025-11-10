@@ -1,7 +1,7 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
 import exportSarif from '../dotnet-format-exporter';
-import path from 'path';
+import path from 'node:path';
 import { Log, Result, ReportingDescriptor } from 'sarif';
 
 describe('Dotnet format exporter exportSarif module', () => {
@@ -11,7 +11,7 @@ describe('Dotnet format exporter exportSarif module', () => {
 
     expect(fs.existsSync(outputFilePath)).toBe(true);
     const stats = fs.statSync(outputFilePath);
-    expect(stats.size).toBeGreaterThan(1024);
+    expect(stats.size).toBeGreaterThan(256);
 
     // Read and validate SARIF structure
     const sarifContent = JSON.parse(fs.readFileSync(outputFilePath, 'utf8'));
@@ -29,24 +29,24 @@ describe('Dotnet format exporter exportSarif module', () => {
     // Validate tool
     expect(run.tool.driver.name).toBe('dotnet format');
     expect(run.tool.driver.informationUri).toBe('https://learn.microsoft.com/dotnet/core/tools/dotnet-format');
-    expect(run.tool.driver.version).toBe('8.0.100');
+    expect(run.tool.driver.version).toBe('unknown');
 
     // Validate rules
     expect(run.tool.driver.rules).toBeDefined();
-    expect(run.tool.driver.rules.length).toBe(2); // IDE0055 and CA1822
+    expect(run.tool.driver.rules.length).toBe(1); // IMPORTS
 
     // Validate results
     expect(run.results).toBeDefined();
-    expect(run.results.length).toBe(4);
+    expect(run.results.length).toBe(2);
 
     // Check first result
     const firstResult = run.results[0];
-    expect(firstResult.ruleId).toBe('IDE0055');
-    expect(firstResult.level).toBe('note'); // style category
-    expect(firstResult.message.text).toBe('Fix formatting issue');
-    expect(firstResult.locations[0].physicalLocation.artifactLocation.uri).toBe('Program.cs');
-    expect(firstResult.locations[0].physicalLocation.region.startLine).toBe(12);
-    expect(firstResult.locations[0].physicalLocation.region.startColumn).toBe(5);
+    expect(firstResult.ruleId).toBe('IMPORTS');
+    expect(firstResult.level).toBe('note');
+    expect(firstResult.message.text).toBe('Corrigez le classement des importations.');
+    expect(firstResult.locations[0].physicalLocation.artifactLocation.uri).toContain('AdvertisementService.cs');
+    expect(firstResult.locations[0].physicalLocation.region.startLine).toBe(1);
+    expect(firstResult.locations[0].physicalLocation.region.startColumn).toBe(1);
   });
 
   test('minified output', () => {
@@ -68,15 +68,38 @@ describe('Dotnet format exporter exportSarif module', () => {
     const sarifContent: Log = JSON.parse(fs.readFileSync(outputFilePath, 'utf8'));
     const run = sarifContent.runs[0];
 
-    // Find CA1822 result (analyzer category)
-    const analyzerResult = run.results?.find((r: Result) => r.ruleId === 'CA1822');
-    expect(analyzerResult).toBeDefined();
-    expect(analyzerResult?.level).toBe('warning'); // analyzer category
+    // Find IMPORTS result
+    const importsResult = run.results?.find((r: Result) => r.ruleId === 'IMPORTS');
+    expect(importsResult).toBeDefined();
+    expect(importsResult?.level).toBe('note');
 
-    // Find rule with analyzer category
-    const analyzerRule = run.tool.driver.rules?.find((r: ReportingDescriptor) => r.id === 'CA1822');
-    expect(analyzerRule).toBeDefined();
-    expect(analyzerRule?.defaultConfiguration?.level).toBe('warning');
-    expect(analyzerRule?.properties?.category).toBe('analyzer');
+    // Find rule with IMPORTS id
+    const importsRule = run.tool.driver.rules?.find((r: ReportingDescriptor) => r.id === 'IMPORTS');
+    expect(importsRule).toBeDefined();
+    expect(importsRule?.defaultConfiguration?.level).toBe('note');
+  });
+
+  test('handles empty diagnostics array', () => {
+    const outputFilePath = path.join(__dirname, '../../tmp/output/dotnet-format-empty.json');
+    exportSarif('./src/tests/data/dotnet-format-empty.json', outputFilePath, '.');
+
+    expect(fs.existsSync(outputFilePath)).toBe(true);
+    const sarifContent: Log = JSON.parse(fs.readFileSync(outputFilePath, 'utf8'));
+
+    // Should still have valid SARIF structure
+    expect(sarifContent.version).toBe('2.1.0');
+    expect(sarifContent.runs).toBeDefined();
+    expect(sarifContent.runs.length).toBe(1);
+
+    const run = sarifContent.runs[0];
+    expect(run.tool.driver.name).toBe('dotnet format');
+
+    // Should have no results and empty/no rules
+    expect(run.results).toBeDefined();
+    expect(run.results?.length).toBe(0);
+    // Rules can be empty array or undefined when no diagnostics
+    if (run.tool.driver.rules) {
+      expect(run.tool.driver.rules.length).toBe(0);
+    }
   });
 });
