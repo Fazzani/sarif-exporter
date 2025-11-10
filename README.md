@@ -5,7 +5,7 @@
 
 ---
 
-## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit reports (NPM, NUGET, COMPOSER)
+## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit and formatting reports (NPM, NUGET, COMPOSER, DOTNET-FORMAT)
 
 ## How to use
 
@@ -15,13 +15,14 @@
 Usage: index [options] <filename>
 
 Arguments:
-  filename                   Json source report path (Nuget/NPM/Composer(php))
+  filename                   Json source report path (Nuget/NPM/Composer(php)/dotnet-format)
 
 Options:
-  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", "composer", default: "npm")
+  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", "composer", "dotnet-format", default: "npm")
   -o, --output <output>      SARIF Output filename path (default: "./sarif_output.json")
   -r, --rootDir <rootDir>    Project root directory (default: ".")
   -d, --debug                Enable debug
+  -m, --minify               Output minified SARIF (compact JSON without indentation)
   -h, --help                 display help for command
 ```
 
@@ -34,6 +35,23 @@ dotnet list project.sln package --vulnerable --include-transitive --format json 
 npm audit --json  > audit.json
 # composer (php) audit report
 composer audit --format=json  > audit.json
+# dotnet format report
+dotnet format --verify-no-changes --report format-report.json --report-format json
+```
+
+## Examples
+
+### Convert dotnet format report to SARIF
+
+```shell
+# Generate dotnet format report
+dotnet format --verify-no-changes --report format-report.json --report-format json
+
+# Convert to SARIF (formatted output)
+sarif-exporter -f dotnet-format format-report.json -o format-report.sarif
+
+# Convert to SARIF (minified output)
+sarif-exporter -f dotnet-format format-report.json -o format-report.sarif -m
 ```
 
 ---

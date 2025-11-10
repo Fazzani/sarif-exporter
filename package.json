@@ -1,7 +1,7 @@
 {
   "name": "sarif-exporter",
   "version": "1.0.0",
-  "description": "SARIF exporter for several audit reports (NPM, NUGET)",
+  "description": "SARIF exporter for several audit and formatting reports (NPM, NUGET, COMPOSER, DOTNET-FORMAT)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Fazzani/sarif-exporter.git"
@@ -14,7 +14,9 @@
     "audit",
     "npm",
     "nuget",
-    "dotnet"
+    "dotnet",
+    "dotnet-format",
+    "formatter"
   ],
   "author": "Heni FAZZANI",
   "license": "MIT",
