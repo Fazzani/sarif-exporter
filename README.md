@@ -5,60 +5,200 @@
 
 ---
 
-## This is a [SARIF](https://sarifweb.azurewebsites.net/) exporter for several audit and formatting reports (NPM, NUGET, COMPOSER, DOTNET-FORMAT)
+An exporter for several audit reports (NPM, NuGet, Composer) — converts scanner/audit outputs into SARIF (Static Analysis Results Interchange Format) so they can be imported into security dashboards and CI pipelines.
 
-## How to use
+[![build status](https://img.shields.io/badge/build-pending-lightgrey)](https://github.com/Fazzani/sarif-exporter/actions)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-```shell
-> sarif-exporter --help
+Table of contents
+- [Overview](#overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Setup](#setup)
+  - [Local development](#local-development)
+  - [Production / CI usage](#production--ci-usage)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+  - [Quick example (recommended)](#quick-example-recommended)
+  - [Command-line (CLI)](#command-line-cli)
+  - [Programmatic API](#programmatic-api)
+- [Configuration options](#configuration-options)
+- [Contributing](#contributing)
+- [License](#license)
+- [Maintainers / Contact](#maintainers--contact)
 
-Usage: index [options] <filename>
+## Overview
+sarif-exporter normalizes vulnerability and audit outputs from package managers (npm, NuGet, Composer, etc.) into SARIF v2.1.0 so results can be consumed by security dashboards, code scanning uploaders, or CI steps that understand SARIF.
 
-Arguments:
-  filename                   Json source report path (Nuget/NPM/Composer(php)/dotnet-format)
+Written primarily in TypeScript, the project is designed to be extendable to additional input formats.
 
-Options:
-  -f, --fileFormat <format>  Source file format (choices: "npm", "nuget", "composer", "dotnet-format", default: "npm")
-  -o, --output <output>      SARIF Output filename path (default: "./sarif_output.json")
-  -r, --rootDir <rootDir>    Project root directory (default: ".")
-  -d, --debug                Enable debug
-  -m, --minify               Output minified SARIF (compact JSON without indentation)
-  -h, --help                 display help for command
+## Features
+- Convert audit/scan reports from NPM, NuGet, Composer to SARIF v2.1.0
+- CLI for easy integration in pipelines
+- Programmatic API for embedding in tools or scripts
+- Configurable behavior (log level, fail-on-error, etc.)
+- Extensible converters for additional formats
+
+## Requirements
+- Node.js >= 16
+- npm or pnpm
+- (Optional) Docker for containerized CI runs
+
+## Setup
+
+### Local development
+1. Clone the repository
+```bash
+git clone https://github.com/Fazzani/sarif-exporter.git
+cd sarif-exporter
 ```
 
-## Accepted input files CLI
-
-```shell
-# dotnet cmd generate audit report
-dotnet list project.sln package --vulnerable --include-transitive --format json > audit.json
-# npm audit report
-npm audit --json  > audit.json
-# composer (php) audit report
-composer audit --format=json  > audit.json
-# dotnet format report
-dotnet format --verify-no-changes --report format-report.json --report-format json
+2. Install dependencies
+```bash
+npm ci
+# or
+pnpm install
 ```
 
-## Examples
-
-### Convert dotnet format report to SARIF
-
-```shell
-# Generate dotnet format report
-dotnet format --verify-no-changes --report format-report.json --report-format json
-
-# Convert to SARIF (formatted output)
-sarif-exporter -f dotnet-format format-report.json -o format-report.sarif
-
-# Convert to SARIF (minified output)
-sarif-exporter -f dotnet-format format-report.json -o format-report.sarif -m
+3. Build the TypeScript sources
+```bash
+npm run build
 ```
 
----
+4. Run tests and static checks
+```bash
+npm test
+npm run lint
+```
 
-## References
+5. Start in development mode (if available)
+```bash
+npm run dev
+```
 
-- [How To Create An NPM Package](https://www.totaltypescript.com/how-to-create-an-npm-package)
-- [Writing Your Own TypeScript CLI](https://dawchihliou.github.io/articles/writing-your-own-typescript-cli)
-- [bandit: Python Sarif exporter](https://bandit.readthedocs.io/)
-- [KICS for infrastructure](https://www.kics.io/#supportedplatforms)
+### Production / CI usage
+- If the package is published to npm:
+```bash
+# Run without installing globally
+npx sarif-exporter ./audit.json -f nuget -o ./report.sarif
+
+# Or install globally
+npm install -g sarif-exporter
+sarif-exporter ./audit.json -f nuget -o ./report.sarif
+```
+
+- If running from the repository in CI:
+```bash
+npm ci
+npm run build
+node dist/cli.js ./audit.json -f nuget -o ./report.sarif
+```
+
+### Configuration
+Behavior can be configured by:
+- CLI flags
+- A configuration file (JSON/YAML), e.g. `sarif-config.json`
+- Environment variables (example: SARIF_EXPORTER_LOG_LEVEL)
+
+Minimal `sarif-config.json` example:
+```json
+{
+  "input": "./audit.json",
+  "format": "nuget",
+  "output": "./report.sarif",
+  "sarifVersion": "2.1.0",
+  "failOnError": false,
+  "logLevel": "info"
+}
+```
+
+## Usage
+
+### Quick example (recommended)
+Run the exporter with npx (convenient for CI or one-off conversions):
+```bash
+npx sarif-exporter ./audit.json -f nuget -o ./report.sarif
+```
+This command reads ./audit.json (NuGet format) and writes the SARIF result to ./report.sarif.
+
+### Command-line (CLI)
+Common usage patterns:
+```bash
+# Using explicit flags
+npx sarif-exporter --input ./audit.json --format nuget --output ./report.sarif
+
+# Using short flags
+npx sarif-exporter ./audit.json -f nuget -o ./report.sarif
+
+# Using a config file
+npx sarif-exporter --config ./sarif-config.json
+```
+
+Common CLI options
+- --input, -i : path to input report file (positional input file is also supported)
+- --format, -f : input format (npm | nuget | composer)
+- --output, -o : path for generated SARIF file
+- --config, -c : path to configuration file (JSON/YAML)
+- --log-level : debug | info | warn | error
+- --fail-on-error : exit with non-zero status if conversion fails
+- --help : show usage information
+
+Run the CLI help to see the exact flags your installed version exposes:
+```bash
+npx sarif-exporter --help
+```
+
+### Programmatic API
+Example TypeScript usage:
+```ts
+import { convertReportToSarif } from 'sarif-exporter'; // or from './dist' when local
+
+async function run() {
+  const sarif = await convertReportToSarif({
+    inputPath: './audit.json',
+    format: 'nuget',
+    sarifVersion: '2.1.0'
+  });
+  // write sarif object to disk or return it
+}
+run();
+```
+
+API options (typical)
+- inputPath: string
+- format: 'npm' | 'nuget' | 'composer' | string
+- outputPath?: string
+- sarifVersion?: string (default "2.1.0")
+- failOnError?: boolean
+- logLevel?: 'debug'|'info'|'warn'|'error'
+
+## Configuration options
+- inputPath (string) — path to the input report
+- format (string) — one of npm, nuget, composer
+- outputPath (string) — path for the SARIF file (if omitted, function returns SARIF object)
+- sarifVersion (string) — SARIF spec version (default 2.1.0)
+- failOnError (boolean) — exit non-zero when conversion fails
+- logLevel (string) — logging verbosity
+
+## Contributing
+Contributions are welcome:
+- Fork the repo, create a feature branch (feature/<name>)
+- Add tests for new converters or features
+- Run lint and tests locally
+- Open a pull request with a clear description and rationale
+
+Helpful commands:
+```bash
+npm ci
+npm run lint
+npm run build
+npm test
+```
+
+Please follow existing TypeScript styles and include unit tests for new converters.
+
+## License
+MIT — see the LICENSE file.
+
+## Maintainers / Contact
+Maintainer: Fazzani — https://github.com/Fazzani
