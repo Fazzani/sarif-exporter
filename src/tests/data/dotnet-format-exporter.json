@@ -1,0 +1,45 @@
+{
+  "version": "8.0.100",
+  "diagnostics": [
+    {
+      "filePath": "Program.cs",
+      "startLine": 12,
+      "startColumn": 5,
+      "endLine": 12,
+      "endColumn": 25,
+      "ruleId": "IDE0055",
+      "category": "style",
+      "message": "Fix formatting issue"
+    },
+    {
+      "filePath": "Controllers/UserController.cs",
+      "startLine": 25,
+      "startColumn": 1,
+      "endLine": 25,
+      "endColumn": 1,
+      "ruleId": "IDE0055",
+      "category": "whitespace",
+      "message": "Fix whitespace"
+    },
+    {
+      "filePath": "Services/DataService.cs",
+      "startLine": 45,
+      "startColumn": 13,
+      "endLine": 45,
+      "endColumn": 30,
+      "ruleId": "CA1822",
+      "category": "analyzer",
+      "message": "Member 'GetData' does not access instance data and can be marked as static"
+    },
+    {
+      "filePath": "Models/User.cs",
+      "startLine": 8,
+      "startColumn": 9,
+      "endLine": 8,
+      "endColumn": 15,
+      "ruleId": "IDE0055",
+      "category": "style",
+      "message": "Fix formatting issue"
+    }
+  ]
+}
