@@ -1,9 +1,4 @@
-# SARIF exporter
-
-![ci workflow](https://github.com/Fazzani/sarif-exporter/actions/workflows/ci.yaml/badge.svg)
-[![codecov](https://codecov.io/github/Fazzani/sarif-exporter/graph/badge.svg?token=k96Il1KJ94)](https://codecov.io/github/Fazzani/sarif-exporter)
-
----
+# sarif-exporter
 
 An exporter for several audit reports (NPM, NuGet, Composer) — converts scanner/audit outputs into SARIF (Static Analysis Results Interchange Format) so they can be imported into security dashboards and CI pipelines.
 
@@ -12,6 +7,7 @@ An exporter for several audit reports (NPM, NuGet, Composer) — converts scanne
 
 Table of contents
 - [Overview](#overview)
+- [Supported exporters](#supported-exporters)
 - [Features](#features)
 - [Requirements](#requirements)
 - [Setup](#setup)
@@ -32,8 +28,37 @@ sarif-exporter normalizes vulnerability and audit outputs from package managers 
 
 Written primarily in TypeScript, the project is designed to be extendable to additional input formats.
 
+## Supported exporters
+The project includes converters (exporters) for the following input formats:
+
+- NPM (npm audit / npm audit --json)
+  - Typical input: output of `npm audit --json` or similar JSON audits.
+  - Notes: Maps npm advisories, vulnerable ranges and dependency paths into SARIF results.
+
+- NuGet (dotnet / NuGet audit outputs)
+  - Typical input: NuGet/Dependabot or `dotnet list package --vulnerable` JSON (or other JSON formats produced by NuGet scanning tools).
+  - Notes: Normalizes package identifiers, CVE/Advisory metadata and affected versions.
+
+- Composer (composer audit)
+  - Typical input: `composer audit --format=json` or other Composer scanner JSON outputs.
+  - Notes: Converts Composer advisories and package version ranges into SARIF.
+
+- dotnet-format (dotnet format JSON report)
+  - Typical input: `dotnet format --report <path> --report-format json` output.
+  - Notes: Converts dotnet format diagnostics (style, whitespace, analyzer) into SARIF results, preserving rule IDs, locations and severity mapping.
+  - CLI example:
+    ```bash
+    npx sarif-exporter ./audit.json -f dotnet-format -o ./report.sarif
+    ```
+    This command reads `./audit.json` produced by dotnet-format and writes the SARIF result to `./report.sarif`.
+
+- Generic / Custom JSON
+  - A flexible importer that can be adapted for other JSON audit formats. Useful for vendor-specific scanners where fields can be mapped via a small adapter.
+
+If you'd like additional exporters added (Yarn, Snyk, Trivy, OS package scanners, etc.), open an issue or PR with an example input file and expected SARIF mapping.
+
 ## Features
-- Convert audit/scan reports from NPM, NuGet, Composer to SARIF v2.1.0
+- Convert audit/scan reports from NPM, NuGet, Composer and dotnet-format to SARIF v2.1.0
 - CLI for easy integration in pipelines
 - Programmatic API for embedding in tools or scripts
 - Configurable behavior (log level, fail-on-error, etc.)
@@ -119,7 +144,7 @@ Run the exporter with npx (convenient for CI or one-off conversions):
 ```bash
 npx sarif-exporter ./audit.json -f nuget -o ./report.sarif
 ```
-This command reads ./audit.json (NuGet format) and writes the SARIF result to ./report.sarif.
+This command reads `./audit.json` (NuGet format) and writes the SARIF result to `./report.sarif`.
 
 ### Command-line (CLI)
 Common usage patterns:
@@ -136,7 +161,7 @@ npx sarif-exporter --config ./sarif-config.json
 
 Common CLI options
 - --input, -i : path to input report file (positional input file is also supported)
-- --format, -f : input format (npm | nuget | composer)
+- --format, -f : input format (npm | nuget | composer | dotnet-format)
 - --output, -o : path for generated SARIF file
 - --config, -c : path to configuration file (JSON/YAML)
 - --log-level : debug | info | warn | error
@@ -166,7 +191,7 @@ run();
 
 API options (typical)
 - inputPath: string
-- format: 'npm' | 'nuget' | 'composer' | string
+- format: 'npm' | 'nuget' | 'composer' | 'dotnet-format' | string
 - outputPath?: string
 - sarifVersion?: string (default "2.1.0")
 - failOnError?: boolean
@@ -174,7 +199,7 @@ API options (typical)
 
 ## Configuration options
 - inputPath (string) — path to the input report
-- format (string) — one of npm, nuget, composer
+- format (string) — one of npm, nuget, composer, dotnet-format
 - outputPath (string) — path for the SARIF file (if omitted, function returns SARIF object)
 - sarifVersion (string) — SARIF spec version (default 2.1.0)
 - failOnError (boolean) — exit non-zero when conversion fails
